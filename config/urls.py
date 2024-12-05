@@ -21,7 +21,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path("mailing/", include("mailing.urls", namespace="mailing")),  # Достаем маршруты страниц из приложения mailing
+    path("mailing/", include("mailing.urls", namespace="mailing")),  # Достаем маршруты страниц из приложения mailing
     # path("users/", include("users.urls", namespace="users")),  # Достаем маршруты страниц из приложения users
 ]
 
