@@ -10,6 +10,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=11, blank=True, null=True, verbose_name='Номер телефона')
     avatar = models.ImageField(upload_to='users/avatars/', blank=True, null=True, verbose_name='Фото(необязательно)')
     country = models.CharField(max_length=50, blank=True, verbose_name='Страна проживания')
+    token = models.CharField(max_length=100, verbose_name="Токен", blank=True, null=True,)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -20,3 +21,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        permissions = [
+            ('can_block_user', 'can block user'),
+            ('can_stop_mailing', 'can stop mailing')
+        ]

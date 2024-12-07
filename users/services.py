@@ -13,9 +13,9 @@ def email_verification(token):
     return HttpResponseRedirect(reverse("users:login"))
 
 
-# @permission_required("users.view_user")
-# def block_user(self, pk):
-#     user = User.objects.get(pk=pk)
-#     user.is_active = {user.is_active: False, not user.is_active: True}[True]
-#     user.save()
-#     return redirect(reverse("users:users"))
+@permission_required("users.view_user")
+def block_user(self, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = {user.is_active: False, not user.is_active: True}[True]
+    user.save()
+    return redirect(reverse("users:users"))

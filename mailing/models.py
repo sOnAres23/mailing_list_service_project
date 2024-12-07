@@ -38,14 +38,17 @@ class Message(models.Model):
 
 class Mailing(models.Model):
     """Модель создания Рассылки"""
+
     CREATED = "Создана"
     LAUNCHED = "Запущена"
     COMPLETED = "Завершена"
+    DISABLED = "Отключена"
 
     STATUS_CHOICES = [
         (CREATED, "Создана"),
         (LAUNCHED, "Запущена"),
         (COMPLETED, "Завершена"),
+        (DISABLED, "Отключена"),
     ]
 
     first_sending = models.DateTimeField(verbose_name="Дата и время первого отправления")
@@ -56,10 +59,9 @@ class Mailing(models.Model):
         default=CREATED,
         verbose_name="Статус рассылки"
     )
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name="Сообщение", related_name="mailings")
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name="Сообщение", related_name="messages")
     recipients = models.ManyToManyField(RecipientMailing, related_name="recipients", verbose_name="Получатели",
-                                        help_text="Укажите получателей рассылки (используйте CTRL или COMMAND)",)
-    is_active = models.BooleanField(default=True, verbose_name="Активность")
+                                        help_text="Укажите получателей рассылки")
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")
 
     def __str__(self):
@@ -82,7 +84,7 @@ class MailingAttempt(models.Model):
         (STATUS_NOK, "Не успешно"),
     ]
 
-    date_attempt = models.DateTimeField(verbose_name="Дата и время попытки рассылки")
+    date_attempt = models.DateTimeField(auto_now_add=True, verbose_name="Дата и время попытки рассылки")
     status = models.CharField(
         max_length=15,
         choices=STATUS_CHOICES,

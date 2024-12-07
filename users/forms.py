@@ -52,14 +52,12 @@ class UserUpdateForm(StyleFormMixin, ModelForm):
         return email
 
 
-# class PasswordRecoveryForm(StyleFormMixin, forms.Form):
-#     email = forms.EmailField(label="Укажите Email")
-#
-#     def clean_email(self):
-#         """
-#         Проверка email на уникальность
-#         """
-#         email = self.cleaned_data.get("email")
-#         if not User.objects.filter(email=email).exists():
-#             raise forms.ValidationError("Такого email нет в системе")
-#         return email
+class PasswordRecoveryForm(StyleFormMixin, forms.Form):
+    email = forms.EmailField(label="Укажите Email")
+
+    def clean_email(self):
+        """Проверка email на уникальность"""
+        email = self.cleaned_data.get("email")
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Такого email нет в системе")
+        return email

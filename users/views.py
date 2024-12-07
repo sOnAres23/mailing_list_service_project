@@ -5,10 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.utils.crypto import get_random_string
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView, FormView
 
 from config import settings
-from users.forms import CustomUserCreationForm, UserUpdateForm
+from users.forms import CustomUserCreationForm, UserUpdateForm, PasswordRecoveryForm
 from users.models import User
 
 
@@ -40,6 +41,9 @@ class UserRegisterView(CreateView):
 class UserListView(LoginRequiredMixin, ListView):
     model = User
     template_name = "users/user_list.html"
+
+    def handle_permission(self):
+        return self.request.user.groups.filter(name="Менеджеры").exists() or self.request.user.is_superuser
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -101,24 +105,24 @@ class EmailConfirmationView(TemplateView):
         return context
 
 
-# class PasswordRecoveryView(FormView):
-#     template_name = "users/password_recovery.html"
-#     form_class = PasswordRecoveryForm
-#     success_url = reverse_lazy("users:login")
-#
-#     def form_valid(self, form):
-#         email = form.cleaned_data["email"]
-#         user = User.objects.get(email=email)
-#         length = 12
-#         alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-#         password = get_random_string(length, alphabet)
-#         user.set_password(password)
-#         user.save()
-#         send_mail(
-#             subject="Восстановление пароля",
-#             message=f"Ваш новый пароль: {password}",
-#             from_email=settings.EMAIL_HOST_USER,
-#             recipient_list=[user.email],
-#             fail_silently=False,
-#         )
-#         return super().form_valid(form)
+class PasswordRecoveryView(FormView):
+    template_name = "users/password_recovery.html"
+    form_class = PasswordRecoveryForm
+    success_url = reverse_lazy("users:login")
+
+    def form_valid(self, form):
+        email = form.cleaned_data["email"]
+        user = User.objects.get(email=email)
+        length = 12
+        alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        password = get_random_string(length, alphabet)
+        user.set_password(password)
+        user.save()
+        send_mail(
+            subject="Восстановление пароля",
+            message=f"Ваш новый пароль: {password}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+        return super().form_valid(form)

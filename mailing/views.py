@@ -48,27 +48,27 @@ class RecipientMailingListView(ListView):
         context_data["title"] = "Получатели"
         return context_data
 
-    # def get_queryset(self, *args, **kwargs):
-    #     user = self.request.user
-    #     if user.is_superuser or user.groups.filter(name="Менеджеры"):
-    #         return super().get_queryset()
-    #     elif user.groups.filter(name="Пользователи"):
-    #         return super().get_queryset().filter(owner=self.request.user)
-    #     raise PermissionDenied
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        if user.is_superuser or user.groups.filter(name="Менеджеры"):
+            return super().get_queryset()
+        elif user.groups.filter(name="Пользователи"):
+            return super().get_queryset().filter(owner=self.request.user)
+        raise PermissionDenied
 
 
 class RecipientMailingDetailView(LoginRequiredMixin, DetailView):
     model = RecipientMailing
     form_class = RecipientForm
 
-    # def dispatch(self, request, queryset=None, *args, **kwargs):
-    #     user = self.request.user
-    #     self.object = super().get_object(queryset)
-    #     if user.is_superuser or user.groups.filter(name="Менеджеры"):
-    #         return self.object
-    #     if self.object.owner != user and not user.is_superuser:
-    #         raise PermissionDenied
-    #     return super().dispatch(request, *args, **kwargs)
+    def dispatch(self, request, queryset=None, *args, **kwargs):
+        user = self.request.user
+        self.object = super().get_object(queryset)
+        if user.is_superuser or user.groups.filter(name="Менеджеры"):
+            return self.object
+        if self.object.owner != user and not user.is_superuser:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
 
 class RecipientMailingUpdateView(LoginRequiredMixin, UpdateView):
@@ -175,27 +175,27 @@ class MailingListView(ListView):
     model = Mailing
     context_object_name = "mailings"
 
-    # def get_queryset(self, *args, **kwargs):
-    #     user = self.request.user
-    #     if user.is_superuser or user.groups.filter(name="Менеджеры").exists():
-    #         return super().get_queryset()
-    #     elif user.groups.filter(name="Пользователи").exists():
-    #         return super().get_queryset().filter(owner=self.request.user)
-    #     raise PermissionDenied
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        if user.is_superuser or user.groups.filter(name="Менеджеры").exists():
+            return super().get_queryset()
+        elif user.groups.filter(name="Пользователи").exists():
+            return super().get_queryset().filter(owner=self.request.user)
+        raise PermissionDenied
 
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
     model = Mailing
     form_class = MailingForm
 
-    # def get_object(self, queryset=None):
-    #     user = self.request.user
-    #     self.object = super().get_object(queryset)
-    #     if user.groups.filter(name="Менеджеры") or user.is_superuser:
-    #         return self.object
-    #     if self.object.owner != user and not user.is_superuser:
-    #         raise PermissionDenied
-    #     return self.object
+    def get_object(self, queryset=None):
+        user = self.request.user
+        self.object = super().get_object(queryset)
+        if user.groups.filter(name="Менеджеры") or user.is_superuser:
+            return self.object
+        if self.object.owner != user and not user.is_superuser:
+            raise PermissionDenied
+        return self.object
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
@@ -223,6 +223,19 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class MailingStopSendView(LoginRequiredMixin, DetailView):
+    model = Mailing
+    template_name = "mailing_service/mailing_stop.html"
+    context_object_name = "mailing_stop"
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user.has_perm("can_stop_mailing"):
+            self.object.status = "Отключена"
+            self.object.save()
+        return self.object
+
+
 class MailingAttemptCreateView(LoginRequiredMixin, CreateView):
     model = MailingAttempt
 
@@ -238,13 +251,13 @@ class MailingAttemptListView(LoginRequiredMixin, ListView):
     model = MailingAttempt
     context_object_name = "attempts"
 
-    # def get_queryset(self, *args, **kwargs):
-    #     user = self.request.user
-    #     if user.is_superuser:
-    #         return super().get_queryset()
-    #     elif user.groups.filter(name="Пользователи").exists():
-    #         return super().get_queryset().filter(owner=self.request.user)
-    #     raise PermissionDenied
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        if user.is_superuser:
+            return super().get_queryset()
+        elif user.groups.filter(name="Пользователи").exists():
+            return super().get_queryset().filter(owner=self.request.user)
+        raise PermissionDenied
 
 
 class ContactsTemplateView(TemplateView):
