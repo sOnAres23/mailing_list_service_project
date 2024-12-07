@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 from mailing.models import Mailing, MailingAttempt, Message, RecipientMailing
-from users.models import User
 
 
 @admin.register(RecipientMailing)
@@ -23,13 +22,6 @@ class MailingAdmin(admin.ModelAdmin):
     list_display = ("id", "first_sending", "end_sending", "status", "message", "owner")
     search_fields = ("status",)
     list_filter = ("status",)
-
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ("id", "avatar", "email", "first_name", "last_name", "middle_name", "phone_number", "country")
-    search_fields = ("email",)
-    list_filter = ("email",)
 
 
 @admin.register(MailingAttempt)

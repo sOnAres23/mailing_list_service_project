@@ -12,7 +12,7 @@ class User(AbstractUser):
     country = models.CharField(max_length=50, blank=True, verbose_name='Страна проживания')
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.email
