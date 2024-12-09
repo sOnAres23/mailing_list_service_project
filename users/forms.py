@@ -1,13 +1,14 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from django.urls import reverse_lazy
 
 from mailing.forms import StyleFormMixin
 from users.models import User
 
 
 class CustomUserCreationForm(StyleFormMixin, UserCreationForm):
+    username = forms.CharField(max_length=50, required=False, help_text="Можете не заполнять")
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone_number',
@@ -21,27 +22,7 @@ class CustomUserCreationForm(StyleFormMixin, UserCreationForm):
 class UserUpdateForm(StyleFormMixin, ModelForm):
     class Meta:
         model = User
-        fields = (
-            "first_name",
-            "last_name",
-            "email",
-            "password",
-            "phone_number",
-            "country",
-            "is_active",
-            "is_superuser",
-            "is_staff",
-            "avatar",
-        )
-        success_url = reverse_lazy("users:users")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        phone_number = self.fields["phone_number"].widget
-
-        self.fields["password"].widget = forms.HiddenInput()
-        phone_number.attrs["class"] = "form-control bfh-phone"
-        phone_number.attrs["data-format"] = "+7 (ddd) ddd-dd-dd"
+        fields = ("first_name", "last_name", "email", "phone_number", "country", "avatar")
 
     def clean_email(self):
         email = self.cleaned_data.get("email")

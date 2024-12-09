@@ -1,0 +1,20 @@
+{% extends 'mailing/basic_design.html' %}
+{% block content %}
+{% load my_tags %}
+<div class="container marketing mt-5">
+    <div class="row">
+
+        <div class="col-lg-4">
+            <img src="{{ object.photo| media_filter }}" alt="Фото" class="rounded" width="200" height="200">
+            <p>ФИО получателя: {{object.fio}}
+            <p>
+            <p>Email получателя: {{object.email }}
+            <p>
+            <p>Комментарий: {{object.comment}}
+            <p>
+            <p><a class="btn btn-secondary" href="{% url 'mailing:recipientmailing_list' %}">Назад</a></p>
+        </div><!-- /.col-lg-4 -->
+
+    </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}}

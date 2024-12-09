@@ -51,15 +51,16 @@ class Mailing(models.Model):
         (DISABLED, "Отключена"),
     ]
 
-    first_sending = models.DateTimeField(verbose_name="Дата и время первого отправления")
-    end_sending = models.DateTimeField(verbose_name="Дата и время окончания отправки")
+    first_sending = models.DateTimeField(blank=True, null=True, verbose_name="Дата и время первого отправления")
+    end_sending = models.DateTimeField(blank=True, null=True, verbose_name="Дата и время окончания отправки")
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
         default=CREATED,
         verbose_name="Статус рассылки"
     )
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name="Сообщение", related_name="messages")
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name="Сообщение",
+                                related_name="messages", help_text="Выберите какое отправить сообщение")
     recipients = models.ManyToManyField(RecipientMailing, related_name="recipients", verbose_name="Получатели",
                                         help_text="Укажите получателей рассылки")
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")

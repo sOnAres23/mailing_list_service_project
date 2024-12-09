@@ -1,0 +1,48 @@
+{% extends 'mailing/basic_design.html' %}
+{% block header %}
+{% include 'mailing/includes/header_menu.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container marketing mt-5">
+    <div class="container text-center mt-3">
+        <div class="row justify-content-center">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <h2>Статистика по рассылкам</h2>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="table-responsive small">
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th>Тема сообщения</th>
+                    <th>Описание рассылки</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Ответ сервера</th>
+                    <th>Создал</th>
+                </tr>
+                </thead>
+
+                {% for attempt in attempts %}
+                <tr>
+                    <td>{{ attempt.mailing.message.theme }}</td>
+                    <td>{{ attempt.mailing.message.content|truncatechars:30 }}</td>
+                    <td>{{ attempt.date_attempt}}</td>
+                    <td>{{ attempt.status}}</td>
+                    <td>{{ attempt.server_response}}</td>
+                    <td>{{ attempt.mailing.owner }}</td>
+
+                </tr>
+                {% endfor%}
+            </table>
+
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+</div>
+{% endblock %}}

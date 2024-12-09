@@ -6,7 +6,8 @@ from django.urls import reverse
 from users.models import User
 
 
-def email_verification(token):
+def email_verification(request, token):
+    """Класс для верификации пользователя"""
     user = get_object_or_404(User, token=token)
     user.is_active = True
     user.save()
@@ -15,6 +16,7 @@ def email_verification(token):
 
 @permission_required("users.view_user")
 def block_user(self, pk):
+    """Класс для блокировки пользователя сайта"""
     user = User.objects.get(pk=pk)
     user.is_active = {user.is_active: False, not user.is_active: True}[True]
     user.save()

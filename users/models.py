@@ -7,13 +7,13 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name='Ваша почта')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
-    phone_number = models.CharField(max_length=11, blank=True, null=True, verbose_name='Номер телефона')
+    phone_number = models.CharField(max_length=15, blank=True, null=True, verbose_name='Номер телефона')
     avatar = models.ImageField(upload_to='users/avatars/', blank=True, null=True, verbose_name='Фото(необязательно)')
     country = models.CharField(max_length=50, blank=True, verbose_name='Страна проживания')
     token = models.CharField(max_length=100, verbose_name="Токен", blank=True, null=True,)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email

@@ -1,0 +1,58 @@
+{% extends 'mailing/basic_design.html' %}
+{% block header %}
+{% include 'mailing/includes/header_menu.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container marketing mt-5">
+    <div class="container text-center mt-3">
+        <div class="row justify-content-center">
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+                <h2>Сообщения</h2>
+                <a class="btn btn-success mt-3" href="{% url 'mailing:message_create' %}">Добавить сообщение
+                    &raquo;</a></p>
+            </div>
+            <div class="col-4">
+
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="table-responsive small">
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th>Тема</th>
+                    <th>Сообщение</th>
+                    <th>Создал</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+
+                {% for object in object_list %}
+                <tr>
+                    <td>{{ object.theme }}</td>
+                    <td>{{ object.content|truncatechars:30 }}</td>
+                    <td>{{ object.owner }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{% url 'mailing:message_detail' object.pk%}">Посмотреть
+                            &raquo;</a>
+                        <a class="btn btn-primary btn-sm" href="{% url 'mailing:message_update' object.pk%}">Редактировать
+                            &raquo;</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'mailing:message_delete' object.pk%}">Удалить</a>
+                    </td>
+
+                </tr>
+                {% endfor%}
+            </table>
+
+        </div><!-- /.row -->
+
+
+    </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}}

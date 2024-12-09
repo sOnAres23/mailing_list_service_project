@@ -19,15 +19,22 @@ class RecipientForm(StyleFormMixin, ModelForm):
     class Meta:
         model = RecipientMailing
         fields = "__all__"
+        exclude = ['owner']
 
 
 class MessageForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Message
         fields = "__all__"
+        exclude = ['owner']
 
 
 class MailingForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Mailing
-        fields = "__all__"
+        exclude = [
+            "first_sending",
+            "end_sending",
+            "status",
+            "owner"
+        ]
