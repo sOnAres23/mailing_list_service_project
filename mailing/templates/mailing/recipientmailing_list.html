@@ -1,0 +1,72 @@
+{% extends 'mailing/basic_design.html' %}
+{% load my_tags %}
+
+{% block header %}
+{% include 'mailing/includes/header_menu.html' %}
+{% endblock %}
+
+{% block content %}
+{% load my_tags %}
+<div class="container marketing mt-5">
+    <div class="container text-center mt-3">
+        <div class="row justify-content-center">
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+                <h2>Получатели</h2>
+                <a class="btn btn-success mt-3" href="{% url 'mailing:recipientmailing_create' %}">Добавить получателя
+                    &raquo;</a></p>
+            </div>
+            <div class="col-4">
+
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="table-responsive small">
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>ФИО получателя</th>
+                    <th>email получателя</th>
+                    <th>Комментарий</th>
+                    {% if request.user.is_superuser %}
+                    <th>Создал</th>
+                    {% endif %}
+                    <th>Действия</th>
+                </tr>
+                </thead>
+
+                {% for object in object_list %}
+                <tr>
+                    <td>
+                        <img src="{{ object.photo|media_filter }}" alt="Фото" class="rounded" width="40" height="40">
+                    </td>
+                    <td>{{ object.fio }}</td>
+                    <td>{{ object.email}}</td>
+                    <td>{{ object.comment|truncatechars:30 }}</td>
+                    {% if request.user.is_superuser %}
+                    <td>{{ object.owner }}</td>
+                    {% endif %}
+                    <td>
+                        <a class="btn btn-primary btn-sm"
+                           href="{% url 'mailing:recipientmailing_detail' object.pk%}">Посмотреть
+                            &raquo;</a>
+                        <a class="btn btn-primary btn-sm"
+                           href="{% url 'mailing:recipientmailing_update' object.pk%}">Редактировать
+                            &raquo;</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'mailing:recipientmailing_delete' object.pk%}">Удалить</a>
+                    </td>
+
+                </tr>
+                {% endfor%}
+            </table>
+
+        </div><!-- /.row -->
+
+    </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}}

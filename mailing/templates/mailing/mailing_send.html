@@ -1,0 +1,20 @@
+{% extends 'mailing/basic_design.html' %}
+{% load my_tags %}
+{% block title %}Отправка рассылки{% endblock %}
+
+{% block header %}
+{% include 'mailing/includes/header_menu.html' %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Поздравляем!</h1>
+    <p class="lead">Рассылка отправлена</p>
+</div>
+
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Рассылка №{{mailing_send.id}} успешно отправлена,
+        детализацию рассылки можно посмотреть в разделе статистика.</h4>
+    <p><a class="text-warning" href="{% url 'mailing:mailing_list' %}">Отправить еще</a></p>
+</div>
+{% endblock %}

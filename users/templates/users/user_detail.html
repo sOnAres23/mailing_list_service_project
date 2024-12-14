@@ -1,0 +1,42 @@
+{% extends 'mailing/basic_design.html' %}
+{% load users_tags %}
+{% block title %}Профиль{% endblock %}
+
+{% block header %}
+{% include 'mailing/includes/header_menu.html' %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-5">Мой Профиль</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row text-center">
+    <div class="col-3"></div>
+    <div class="card-body col-6 text-center">
+        <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+            <h3 class="form-label">Имя пользователя</h3>
+            <h1 class="form-control">{{ user.first_name }}</h1>
+
+             <h3 class="form-label">Фамилия пользователя</h3>
+            <h1 class="form-control">{{ user.last_name }}</h1>
+
+            <h3 class="form-label">Email адрес</h3>
+            <h1 class="form-control">{{ user.email }}</h1>
+
+            <h3 class="form-label">Номер телефона</h3>
+            <h1 class="form-control">{{ user.phone_number }}</h1>
+
+            <h3 class="form-label">Страна</h3>
+            <h1 class="form-control">{{ user.country }}</h1>
+
+            <h3 class="form-label">Аватар</h3>
+            <img src="{{ user.avatar | user_media_filter }}" class="image" width="200" height="200">
+            <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'users:update' user.pk%}">Редактировать</a>
+                <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'mailing:home' %}">Назад</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-3"></div>
+</div>
+{% endblock %}

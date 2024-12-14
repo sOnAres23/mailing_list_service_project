@@ -1,0 +1,23 @@
+{% extends "mailing/basic_design.html" %}
+{% load my_tags %}
+{% block title %}Подтвержение пользователя{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <p class="display-5">SendMail Service</p>
+</div>
+<div class="alert alert-info" role="alert">
+    <h4 class="row justify-content-center">Письмо подтверждения отправлено!</h4>
+    <p class="text-center">
+        На адрес электронной почты было отправлено письмо с подтверждением. Пожалуйста, проверьте свою
+        электронную почту и нажмите на ссылку подтверждения, чтобы завершить регистрацию.
+        Если письмо не пришло, проверьте папку спам.
+    </p>
+
+    <div class="row justify-content-center">
+        <div class="col-3">
+            <h6 class="text-center">Можете закрывать эту страницу и переходить на почту:)</h6>
+        </div>
+    </div>
+</div>
+{% endblock %}
