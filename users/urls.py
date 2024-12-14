@@ -17,4 +17,4 @@ urlpatterns = [path('login/', LoginView.as_view(template_name='users/login.html'
                path("password-recovery/", views.PasswordRecoveryView.as_view(), name="password_recovery"),
                path("password-confirmation/", views.PasswordConfirmationView.as_view(), name="password-confirmation"),
                path("block_user/<int:pk>", block_user, name="block_user"),
-            ]
+               ]

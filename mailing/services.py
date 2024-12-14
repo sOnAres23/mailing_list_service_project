@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import send_mail
@@ -25,9 +27,10 @@ def send_mailing(self):
         from_email=settings.EMAIL_HOST_USER
     )
 
-    self.object.end_sending = timezone.now()
-    self.object.status = 'Завершена'
-    self.object.save()
+    self.object.end_sending = datetime.now() + timedelta(days=1)
+    if self.object.end_sending <= datetime.now():
+        self.object.status = 'Завершена'
+        self.object.save()
 
     mailing_attempt = MailingAttempt.objects.create(mailing=self.object, server_response=server_response,
                                                     owner=self.request.user)
